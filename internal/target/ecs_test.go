@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -25,10 +26,7 @@ func (f *fakeECS) ListClusters(_ context.Context, in *ecs.ListClustersInput, _ .
 	if f.failClusters {
 		return nil, errors.New("access denied")
 	}
-	page := 0
-	if in.NextToken != nil {
-		fmt.Sscanf(*in.NextToken, "%d", &page)
-	}
+	page, _ := strconv.Atoi(aws.ToString(in.NextToken))
 	out := &ecs.ListClustersOutput{ClusterArns: f.clusterPages[page]}
 	if page+1 < len(f.clusterPages) {
 		out.NextToken = aws.String(fmt.Sprint(page + 1))
@@ -43,10 +41,7 @@ func (f *fakeECS) ListTasks(_ context.Context, in *ecs.ListTasksInput, _ ...func
 		return nil, errors.New("cluster not found")
 	}
 	pages := f.taskPages[cluster]
-	page := 0
-	if in.NextToken != nil {
-		fmt.Sscanf(*in.NextToken, "%d", &page)
-	}
+	page, _ := strconv.Atoi(aws.ToString(in.NextToken))
 	if page >= len(pages) {
 		return &ecs.ListTasksOutput{}, nil
 	}

@@ -1,5 +1,6 @@
-BINARY  := ssmhop
-PKG     := github.com/tryoverflow/ssmhop
+BINARY   := ssmhop
+PKG      := github.com/tryoverflow/ssmhop
+GOLANGCI := v2.13.2
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 LDFLAGS := -s -w -X $(PKG)/internal/cmd.Version=$(VERSION)
 
@@ -36,7 +37,7 @@ vet:
 
 .PHONY: lint
 lint:
-	golangci-lint run
+	go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI) run
 
 .PHONY: snapshot
 snapshot:

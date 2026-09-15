@@ -7,3 +7,6 @@ linters:
     - unconvert
     - usestdlibvars
     - whitespace
+  exclusions:
+    presets:
+      - std-error-handling

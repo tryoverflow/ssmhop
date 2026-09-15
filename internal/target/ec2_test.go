@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -22,10 +23,7 @@ func (f *fakeSSM) DescribeInstanceInformation(_ context.Context, in *ssm.Describ
 	if f.fail {
 		return nil, errors.New("not authorized to perform ssm:DescribeInstanceInformation")
 	}
-	page := 0
-	if in.NextToken != nil {
-		fmt.Sscanf(*in.NextToken, "%d", &page)
-	}
+	page, _ := strconv.Atoi(aws.ToString(in.NextToken))
 	out := &ssm.DescribeInstanceInformationOutput{InstanceInformationList: f.pages[page]}
 	if page+1 < len(f.pages) {
 		out.NextToken = aws.String(fmt.Sprint(page + 1))
