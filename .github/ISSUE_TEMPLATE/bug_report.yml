@@ -1,0 +1,48 @@
+name: Bug report
+description: Something doesn't work
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the command you ran and the output. Redact account IDs, instance IDs and ARNs.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ssmhop version
+      placeholder: ssmhop version
+    validations:
+      required: true
+  - type: input
+    id: plugin
+    attributes:
+      label: session-manager-plugin version
+      placeholder: session-manager-plugin --version
+  - type: input
+    id: os
+    attributes:
+      label: OS and architecture
+      placeholder: macOS 15 arm64
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Target kind
+      options: [EC2, ECS, both, not applicable]
+    validations:
+      required: true
+  - type: dropdown
+    id: finder
+    attributes:
+      label: Finder
+      options: [fzf, built-in (--no-fzf), unsure]
