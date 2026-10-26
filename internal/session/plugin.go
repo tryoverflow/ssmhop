@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 )
 
@@ -29,6 +30,11 @@ func Endpoint(region string) string {
 func Run(ctx context.Context, s Session, region, profile string, input any) error {
 	if s.StreamURL == "" || s.TokenValue == "" {
 		return errors.New("session response was missing StreamUrl or TokenValue")
+	}
+
+	validProfile := regexp.MustCompile(`^[a-zA-Z0-9_\-\./\\]+$`)
+	if profile != "" && !validProfile.MatchString(profile) {
+		return fmt.Errorf("invalid input")
 	}
 
 	sessionJSON, err := json.Marshal(s)
